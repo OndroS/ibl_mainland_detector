@@ -1,5 +1,4 @@
-console.time('Execution Time');
-
+// console.time('Execution Time');
 const csvFilePath = './data/country-borders.csv';
 // Import required modules
 const fs = require('fs');
@@ -56,5 +55,5 @@ readStream.on('close', () => {
 
   // Log a message to the console
   console.log('Mainland IDs have been written to mainlandIds.txt');
-  console.timeEnd('Execution Time');
+  // console.timeEnd('Execution Time');
 });
