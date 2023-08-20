@@ -109,6 +109,9 @@ country:IT.22
 country:IV
 country:IZ
 country:JA.63
+country:JA.66
+country:JA.28
+country:JA.48
 country:JE
 country:JM
 country:JN
@@ -168,6 +171,7 @@ country:NS
 country:NT.3
 country:NU.5
 country:NZ.26
+country:NZ.27
 country:PA
 country:PC
 country:PE
@@ -231,6 +235,7 @@ country:UG
 country:UK.46
 country:UP.4
 country:US.232
+country:US.229
 country:UV
 country:UY
 country:UZ

@@ -10,31 +10,35 @@
 
 ## Introduction
 
-The goal of this code is to identify the mainland boundary for each country by assuming that the mainland boundary has the largest number of coordinate points.
+The goal of this code is to identify the mainland boundary for each country by assuming that the mainland is the largest polygon. 
 
 ## How It Works
 
 ### Reading the CSV File
 
-The code reads the CSV file line by line using a read stream. Each line represents a boundary and contains information like a unique ID, country code, country name, and geographical coordinates.
+The code reads the CSV data file line by line, parsing each line to extract the polygon's unique ID, country name, and its geographical coordinates. Polygons are grouped by their country name, storing the polygon's ID.
 
 ### Parsing and Grouping
 
-Each line is split into components to extract the relevant information. The geographical coordinates are also split by ':' to calculate the number of points in the polygon. Polygons are then grouped by country name, storing the polygon's ID and size (number of points).
+The code reads the CSV data file line by line, parsing each line to extract the polygon's unique ID, country name, and its geographical coordinates. Polygons are grouped by their country name, storing the polygon's ID and its size.
 
 ### Identifying Mainland Boundaries
 
-After reading the entire file, the code iterates through the countries and finds the largest polygon for each country, assuming that the largest polygon by the number of points is the mainland. The logic uses the `reduce` method to compare the size of the polygons within each country and identify the largest one.
+After processing the entire file, the script identifies the largest polygon for each country, considering it as the mainland. Special provisions are made for countries known to have multiple main islands, such as Japan, New Zealand, and the United States.
 
 ### Writing the Results
 
 The unique IDs of the mainland polygons are then written to a file called `mainlandIds.txt`.
 
-## Reasoning
+### Testing and Validation
 
-The underlying assumption that the largest polygon represents the mainland may or may not be accurate for all cases, depending on the data provided. However, in many cases, this assumption can be a reasonable heuristic to identify mainland boundaries.
+The testing script, test.js, validates the output by ensuring:
 
-If the data includes more explicit information about which boundaries are mainland versus islands, that would be preferable. In the absence of such information, the approach used here provides a straightforward way to infer mainland boundaries based on a plausible characteristic (i.e., having the largest number of coordinate points).
+`node test.js`
+
+Specific countries have only their mainland boundaries identified.
+The US includes both its mainland and Alaska.
+Any inconsistencies will be displayed, allowing users to cross-check and refine the input data or the logic.
 
 ## Usage
 

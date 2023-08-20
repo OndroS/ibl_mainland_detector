@@ -1,6 +1,4 @@
-// console.time('Execution Time');
 const csvFilePath = './data/country-borders.csv';
-// Import required modules
 const fs = require('fs');
 const readline = require('readline');
 
@@ -16,44 +14,50 @@ const readStream = readline.createInterface({
 
 // Read each line of the CSV file
 readStream.on('line', (line) => {
-  // Split line into components
   const parts = line.split(',');
-  // Get the unique ID of the boundary
   const id = parts[0];
-  // Extract coordinates and calculate the number of points in the polygon
   const coordinates = parts[3].split(':');
-  
-  // Group polygons by country name
   const countryName = parts[2];
+  
   if (!polygonsByCountry[countryName]) {
     polygonsByCountry[countryName] = [];
   }
-  
+
   // Store the polygon's ID and size for later comparison
   polygonsByCountry[countryName].push({ id, size: coordinates.length });
 });
 
-// After reading the entire file
 readStream.on('close', () => {
-  // List to store the mainland IDs
   const mainlandIds = [];
 
-  // Iterate through the countries and find the largest polygon (by number of points) for each
+  // Iterate through the countries and find the largest polygons
   for (const country in polygonsByCountry) {
     const polygons = polygonsByCountry[country];
-    // Use reduce to find the largest polygon
-    const mainland = polygons.reduce((largest, current) => {
-      // If the current polygon has more points, consider it the largest so far
-      return current.size > largest.size ? current : largest;
-    });
-    // Store the ID of the mainland polygon
-    mainlandIds.push(mainland.id);
+    
+    // Sort polygons by size in descending order
+    const sortedPolygons = polygons.sort((a, b) => b.size - a.size);
+    
+    // Store the ID of the largest polygon as the mainland
+    mainlandIds.push(sortedPolygons[0].id);
+    
+    // For countries known to have multiple main islands, consider more than one polygon
+    if (country === 'Japan') {
+      for (let i = 1; i < 4; i++) { 
+        mainlandIds.push(sortedPolygons[i].id);
+      }
+    } else if (country === 'New Zealand') {
+      mainlandIds.push(sortedPolygons[1].id); 
+    } else if (country === 'United States') {
+      if (sortedPolygons.length > 1) {  // Make sure there is a second polygon to add
+        mainlandIds.push(sortedPolygons[1].id);
+      }
+    }
   }
 
   // Write the mainland IDs to a file
   fs.writeFileSync('mainlandIds.txt', mainlandIds.join('\n'));
 
-  // Log a message to the console
   console.log('Mainland IDs have been written to mainlandIds.txt');
-  // console.timeEnd('Execution Time');
 });
+
+
