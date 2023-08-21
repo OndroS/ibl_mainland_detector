@@ -20,7 +20,9 @@ The code reads the CSV data file line by line, parsing each line to extract the 
 
 ### Parsing and Grouping
 
-The code reads the CSV data file line by line, parsing each line to extract the polygon's unique ID, country name, and its geographical coordinates. Polygons are grouped by their country name, storing the polygon's ID and its size.
+The code reads the CSV data file line by line, parsing each line to extract the polygon's unique ID, country name, and its geographical coordinates. Polygons are grouped by their country name, storing the polygon's ID and its size. Before storing, the size is calculated by the shoelace formula. 
+
+Shoelace algorithm, or shoelace method (also known as Gauss's area formula and the surveyor's formula) is a mathematical algorithm to determine the area of a simple polygon whose vertices are described by their Cartesian coordinates in the plane. It is called the shoelace formula because of the constant cross-multiplying for the coordinates making up the polygon, like threading shoelaces.
 
 ### Identifying Mainland Boundaries
 
@@ -36,8 +38,7 @@ The testing script, test.js, validates the output by ensuring:
 
 `node test.js`
 
-Specific countries have only their mainland boundaries identified.
-The US includes both its mainland and Alaska.
+Specific countries have only their mainland boundaries identified or the US includes both its mainland and Alaska and etc..
 Any inconsistencies will be displayed, allowing users to cross-check and refine the input data or the logic.
 
 ## Usage

@@ -12,19 +12,34 @@ const readStream = readline.createInterface({
   terminal: false
 });
 
+// Function to calculate the area of a polygon using the Shoelace formula
+function calculateArea(coordinates) {
+  let area = 0;
+  const n = coordinates.length;
+
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    const [x1, y1] = coordinates[i].split(' ').map(Number);
+    const [x2, y2] = coordinates[j].split(' ').map(Number);
+    area += x1 * y2 - x2 * y1;
+  }
+
+  return Math.abs(area) / 2;
+}
+
 // Read each line of the CSV file
 readStream.on('line', (line) => {
   const parts = line.split(',');
   const id = parts[0];
-  const coordinates = parts[3].split(':');
+  const coordinates = parts[3].split(':').slice(1);  // Exclude the first element which is not a coordinate
   const countryName = parts[2];
   
   if (!polygonsByCountry[countryName]) {
     polygonsByCountry[countryName] = [];
   }
 
-  // Store the polygon's ID and size for later comparison
-  polygonsByCountry[countryName].push({ id, size: coordinates.length });
+  // Store the polygon's ID and area for later comparison
+  polygonsByCountry[countryName].push({ id, area: calculateArea(coordinates) });
 });
 
 readStream.on('close', () => {
@@ -34,8 +49,8 @@ readStream.on('close', () => {
   for (const country in polygonsByCountry) {
     const polygons = polygonsByCountry[country];
     
-    // Sort polygons by size in descending order
-    const sortedPolygons = polygons.sort((a, b) => b.size - a.size);
+    // Sort polygons by area in descending order
+    const sortedPolygons = polygons.sort((a, b) => b.area - a.area);
     
     // Store the ID of the largest polygon as the mainland
     mainlandIds.push(sortedPolygons[0].id);
@@ -59,5 +74,3 @@ readStream.on('close', () => {
 
   console.log('Mainland IDs have been written to mainlandIds.txt');
 });
-
-
